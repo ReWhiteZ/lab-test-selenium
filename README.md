@@ -5,22 +5,24 @@
 ## สิ่งที่ต้องมี
 
 - Python 3.10 ขึ้นไป (โปรเจกต์นี้กำหนด Python 3.14)
-- `uv` สำหรับจัดการ environment และ dependencies
+- `pip` สำหรับติดตั้ง Selenium ใน virtual environment
 - Google Chrome หรือ Chromium
 
-ติดตั้ง `uv` ตามคำแนะนำในเอกสารทางการ แล้วตรวจสอบด้วย `uv --version` และ `python --version` โดย Selenium รุ่นใหม่มี Selenium Manager ช่วยจัดหา WebDriver ให้เมื่อเปิดเบราว์เซอร์ครั้งแรก จึงไม่จำเป็นต้องดาวน์โหลด ChromeDriver แยกในกรณีทั่วไป
+ตรวจ Python ด้วย `py --version` หรือ `python --version` โดย Selenium รุ่นใหม่มี Selenium Manager ช่วยจัดหา WebDriver ให้เมื่อเปิดเบราว์เซอร์ครั้งแรก จึงไม่จำเป็นต้องดาวน์โหลด ChromeDriver แยกในกรณีทั่วไป
 
 ## สร้างโปรเจกต์จากศูนย์
 
-เปิด Command Prompt (CMD) ในตำแหน่งที่ต้องการเก็บงาน แล้วรัน:
+เปิด Command Prompt (CMD) ในตำแหน่งที่จะเก็บงาน แล้วสร้างโปรเจกต์กับ virtual environment:
 
 ```cmd
-uv init --python 3.14 selenium-python-tests
-cd /d selenium-python-tests
-uv add selenium
+mkdir selenium-saucedemo-test
+cd /d selenium-saucedemo-test
+py -m venv .venv
+.venv\Scripts\activate.bat
+python -m pip install selenium
 ```
 
-คำสั่งจะสร้างโฟลเดอร์โปรเจกต์และ `.venv` ให้เมื่อเรียก `uv run` ครั้งแรก จากนั้นสร้างไฟล์ `test_browser.py` ที่ root ของโปรเจกต์ เพื่อเขียนสคริปต์ทดสอบ
+เมื่อ activate สำเร็จ พรอมป์จะแสดง `(.venv)` ให้สร้างไฟล์ `test_browser.py` ที่ root เพื่อเขียนสคริปต์ทดสอบ ใน CMD หน้าต่างใหม่ต้อง activate อีกครั้งก่อนใช้ Python ของโปรเจกต์
 
 หากต้องการโครงสร้างทดสอบแยกจากไฟล์อื่น สามารถสร้าง `tests/` แล้ววางไฟล์ไว้ภายในได้
 
@@ -29,12 +31,10 @@ uv add selenium
 ```text
 selenium-python-tests/
 ├── .venv/
-├── pyproject.toml
-├── uv.lock
 └── test_browser.py
 ```
 
-ควร commit `pyproject.toml` และ `uv.lock` เพื่อบันทึก dependency แต่ไม่ควร commit `.venv/`
+ไม่ควร commit `.venv/` เพราะเป็น environment ที่สร้างไว้บนเครื่องแต่ละคน
 
 ## หลักการเขียน Selenium test
 
@@ -70,8 +70,8 @@ def test_page_title():
 ไฟล์ตัวอย่างใน Lab นี้เป็นสคริปต์ Selenium แบบตรงไปตรงมา โดยใช้ `assert` เป็นจุดตรวจสอบ:
 
 ```cmd
-uv add selenium
-uv run python 67160134.py
+.venv\Scripts\activate.bat
+python 67160134.py
 ```
 
 สคริปต์เปิด Chrome, ทำขั้นตอนต่าง ๆ ผ่าน locator และ explicit wait, ตรวจ URL/ข้อความ/จำนวนสินค้า แล้วปิด browser ใน `finally`
@@ -81,8 +81,8 @@ uv run python 67160134.py
 Selenium เป็น browser automation library ไม่ได้จัดการโครงสร้าง test หรือรายงานผลให้ครบในตัว หากต้องการแยกกรณีทดสอบและรันเป็นชุด ให้เพิ่ม pytest:
 
 ```cmd
-uv add --dev pytest
-uv run pytest -v
+python -m pip install pytest
+python -m pytest -v
 ```
 
 ตั้งชื่อไฟล์ `test_*.py` และชื่อฟังก์ชัน `test_*` เพื่อให้ pytest ค้นพบ จากนั้นย้ายแต่ละ scenario ไปเป็นฟังก์ชันแยก และใช้ fixture สำหรับเตรียม/ปิด WebDriver
@@ -103,10 +103,9 @@ uv run pytest -v
 ### คำสั่งที่ใช้บ่อย
 
 ```cmd
-uv add selenium                    # เพิ่ม Selenium ในโปรเจกต์ใหม่
-uv run python 67160134.py          # รันสคริปต์ตัวอย่างใน Lab นี้
-uv add --dev pytest                # เพิ่ม test runner เมื่อต้องการแยก test
-uv run pytest -v                   # รัน pytest
+.venv\Scripts\activate.bat
+python 67160134.py
+python -m pytest -v
 ```
 
 ### เมื่อเจอปัญหา
