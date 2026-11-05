@@ -12,11 +12,11 @@
 
 ## สร้างโปรเจกต์จากศูนย์
 
-เปิด PowerShell ในตำแหน่งที่ต้องการเก็บงาน แล้วรัน:
+เปิด Command Prompt (CMD) ในตำแหน่งที่ต้องการเก็บงาน แล้วรัน:
 
-```powershell
+```cmd
 uv init --python 3.14 selenium-python-tests
-cd selenium-python-tests
+cd /d selenium-python-tests
 uv add selenium
 ```
 
@@ -69,7 +69,7 @@ def test_page_title():
 
 ไฟล์ตัวอย่างใน Lab นี้เป็นสคริปต์ Selenium แบบตรงไปตรงมา โดยใช้ `assert` เป็นจุดตรวจสอบ:
 
-```powershell
+```cmd
 uv add selenium
 uv run python 67160134.py
 ```
@@ -80,7 +80,7 @@ uv run python 67160134.py
 
 Selenium เป็น browser automation library ไม่ได้จัดการโครงสร้าง test หรือรายงานผลให้ครบในตัว หากต้องการแยกกรณีทดสอบและรันเป็นชุด ให้เพิ่ม pytest:
 
-```powershell
+```cmd
 uv add --dev pytest
 uv run pytest -v
 ```
@@ -102,7 +102,7 @@ uv run pytest -v
 
 ### คำสั่งที่ใช้บ่อย
 
-```powershell
+```cmd
 uv add selenium                    # เพิ่ม Selenium ในโปรเจกต์ใหม่
 uv run python 67160134.py          # รันสคริปต์ตัวอย่างใน Lab นี้
 uv add --dev pytest                # เพิ่ม test runner เมื่อต้องการแยก test
@@ -122,3 +122,4 @@ uv run pytest -v                   # รัน pytest
 - [Selenium: Finding elements and locators](https://www.selenium.dev/documentation/webdriver/elements/)
 - [Selenium: Waiting for things to happen](https://www.selenium.dev/documentation/webdriver/waits/)
 - [uv: Working on projects](https://docs.astral.sh/uv/guides/projects/)
+
