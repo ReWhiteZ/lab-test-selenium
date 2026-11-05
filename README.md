@@ -93,3 +93,32 @@ uv run pytest -v
 - รอ condition ที่ต้องการแทนการใช้เวลาหน่วงตายตัว
 - ให้แต่ละ test ตรวจผลที่สังเกตได้ เช่น URL, ข้อความ, หรือค่าบนหน้า
 - ปิด browser ทุกครั้ง และอย่าเก็บรหัสผ่านจริงไว้ใน source code
+
+## เปิดดูระหว่างสอบ: ทางลัดและภาพรวมไฟล์นี้
+
+ถ้าต้องเริ่มเขียน test ให้ทำตามลำดับ **เปิด browser → เข้า URL → หา element → ทำ action → รอผล → assert → ปิด browser**. ใช้ `WebDriverWait`/expected condition สำหรับหน้าเว็บที่โหลดไม่ทัน และใช้ `try/finally` เพื่อให้ `driver.quit()` ทำงานทุกกรณี
+
+ตัวอย่างไฟล์ปัจจุบัน `67160134.py` เป็นสคริปต์เดียวที่ทดสอบ flow หลายขั้นต่อกัน ตั้งแต่เปิด browser และกรอกข้อมูล, ตรวจ URL, คลิก element ด้วย locator, ตรวจ badge/ข้อความ และปิด driver ใน `finally`. หากข้อสอบกำหนดหลายกรณีทดสอบ ให้เพิ่ม pytest แล้วแยกแต่ละกรณีเป็นฟังก์ชัน `test_*` พร้อม fixture แทนการรวมทุกอย่างไว้ในสคริปต์เดียว
+
+### คำสั่งที่ใช้บ่อย
+
+```powershell
+uv add selenium                    # เพิ่ม Selenium ในโปรเจกต์ใหม่
+uv run python 67160134.py          # รันสคริปต์ตัวอย่างใน Lab นี้
+uv add --dev pytest                # เพิ่ม test runner เมื่อต้องการแยก test
+uv run pytest -v                   # รัน pytest
+```
+
+### เมื่อเจอปัญหา
+
+- หา element ไม่พบ: ตรวจ locator, ID/attribute และหน้า URL ปัจจุบัน
+- element ยังไม่พร้อม: ใช้ explicit wait ให้รอเงื่อนไขตรงจุด
+- Chrome/driver เปิดไม่ได้: ตรวจว่า Chrome ติดตั้งแล้ว และลองรันใหม่ขณะเชื่อมต่ออินเทอร์เน็ตให้ Selenium Manager จัดหา driver
+- browser ค้างหลัง test: ตรวจว่ามี `driver.quit()` ใน `finally` หรือ fixture teardown
+
+### เอกสารอ้างอิงขณะสอบ
+
+- [Selenium: Getting started](https://www.selenium.dev/documentation/webdriver/getting_started/first_script/)
+- [Selenium: Finding elements and locators](https://www.selenium.dev/documentation/webdriver/elements/)
+- [Selenium: Waiting for things to happen](https://www.selenium.dev/documentation/webdriver/waits/)
+- [uv: Working on projects](https://docs.astral.sh/uv/guides/projects/)
